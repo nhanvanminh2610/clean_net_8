@@ -9,10 +9,10 @@ public class User : IdentityUser<int>
     public DateTime CreatedDateTime { get; set; }
 
     [MaxLength(50)]
-    public string FirstName { get; set; }
+    public string? FirstName { get; set; }
 
     [MaxLength(50)]
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
 
     [NotMapped]
     public string FullName => $"{FirstName} {LastName}";
@@ -21,10 +21,10 @@ public class User : IdentityUser<int>
 
     [Required]
     [MaxLength(50)]
-    public string Avatar { get; set; }
+    public string? Avatar { get; set; }
 
     [MaxLength(256)]
-    public string PasswordSalt { get; set; }
+    public string? PasswordSalt { get; set; }
 
     public virtual ICollection<UserClaim> UserClaims { get; set; }
     public virtual ICollection<UserLogin> UserLogins { get; set; }
