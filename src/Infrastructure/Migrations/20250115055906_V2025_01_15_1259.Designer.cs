@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250115054602_V2025_01_15_1245")]
-    partial class V2025_01_15_1245
+    [Migration("20250115055906_V2025_01_15_1259")]
+    partial class V2025_01_15_1259
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,7 +104,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Tables.RoleClaim", b =>
@@ -124,16 +124,11 @@ namespace Infrastructure.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RoleId1")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("RoleId1");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Tables.User", b =>
@@ -235,7 +230,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Tables.UserClaim", b =>
@@ -255,16 +250,11 @@ namespace Infrastructure.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("UserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Tables.UserLogin", b =>
@@ -278,19 +268,14 @@ namespace Infrastructure.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
 
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("RoleId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Tables.UserRole", b =>
@@ -301,21 +286,11 @@ namespace Infrastructure.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RoleId1")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("integer");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("RoleId1");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Tables.UserToken", b =>
@@ -329,17 +304,12 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Value")
                         .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("UserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Tables.RefreshToken", b =>
@@ -355,30 +325,22 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Tables.RoleClaim", b =>
                 {
-                    b.HasOne("Domain.Entities.Tables.Role", null)
-                        .WithMany()
+                    b.HasOne("Domain.Entities.Tables.Role", "Role")
+                        .WithMany("RoleClaims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.Tables.Role", "Role")
-                        .WithMany("RoleClaims")
-                        .HasForeignKey("RoleId1");
 
                     b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Domain.Entities.Tables.UserClaim", b =>
                 {
-                    b.HasOne("Domain.Entities.Tables.User", null)
-                        .WithMany()
+                    b.HasOne("Domain.Entities.Tables.User", "User")
+                        .WithMany("UserClaims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.Tables.User", "User")
-                        .WithMany("UserClaims")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });
@@ -387,10 +349,6 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Tables.User", "User")
                         .WithMany("UserLogins")
-                        .HasForeignKey("RoleId");
-
-                    b.HasOne("Domain.Entities.Tables.User", null)
-                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -400,25 +358,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Tables.UserRole", b =>
                 {
-                    b.HasOne("Domain.Entities.Tables.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Tables.Role", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1");
-
-                    b.HasOne("Domain.Entities.Tables.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Tables.User", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
 
@@ -427,15 +377,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Tables.UserToken", b =>
                 {
-                    b.HasOne("Domain.Entities.Tables.User", null)
-                        .WithMany()
+                    b.HasOne("Domain.Entities.Tables.User", "User")
+                        .WithMany("UserTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.Tables.User", "User")
-                        .WithMany("UserTokens")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });
