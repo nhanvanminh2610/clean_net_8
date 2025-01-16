@@ -12,10 +12,6 @@ namespace Infrastructure.UnitOfWork
             _dbContext = dbContext;
         }
 
-        public UnitOfWork()
-        {
-        }
-
         public async Task<int> CompleteAsync()
         {
             using var transaction = _dbContext.Database.BeginTransaction();
