@@ -1,4 +1,4 @@
-﻿using Domain.Repositories.Abstract;
+﻿using Domain.Repositories.Interfaces;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

@@ -1,5 +1,7 @@
-﻿using Domain.UnitOfWork;
+﻿using Domain.Repositories.Interfaces;
+using Domain.UnitOfWork;
 using Infrastructure.Context;
+using Infrastructure.Repositories.Concrete;
 
 namespace Infrastructure.UnitOfWork
 {
@@ -32,5 +34,19 @@ namespace Infrastructure.UnitOfWork
         {
             _dbContext.Dispose();
         }
+
+        #region repositories container
+
+        private IUserRepository _appUserRepository;
+        public IUserRepository AppUserRepository
+        {
+            get
+            {
+                if (_appUserRepository == null) _appUserRepository = new UserRepository(_dbContext);
+                return _appUserRepository;
+            }
+        }
+
+        #endregion
     }
 }
