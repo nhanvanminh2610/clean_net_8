@@ -37,13 +37,13 @@ namespace Infrastructure.UnitOfWork
 
         #region repositories container
 
-        private IUserRepository _appUserRepository;
-        public IUserRepository AppUserRepository
+        private IUserRepository _userRepository;
+        public IUserRepository UserRepository
         {
             get
             {
-                if (_appUserRepository == null) _appUserRepository = new UserRepository(_dbContext);
-                return _appUserRepository;
+                if (_userRepository == null) _userRepository = new UserRepository(_dbContext);
+                return _userRepository;
             }
         }
 

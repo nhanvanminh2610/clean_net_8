@@ -1,6 +1,7 @@
 ﻿using Application.Dtos.Request;
 using Application.Dtos.Response;
 using Domain.Entities.Tables;
+using Domain.Helper;
 using Domain.UnitOfWork;
 
 namespace Application.Services.Concrete
@@ -23,20 +24,18 @@ namespace Application.Services.Concrete
                 return new RegisterResponse
                 {
                     Success = false,
-                    Error = "Người dùng đã tồn tại",
+                    Error = "User already exists",
                     ErrorCode = "S02"
                 };
             }
 
-            //var salt = PasswordHelper.GetSecureSalt();
-            //var passwordHash = PasswordHelper.HashUsingPbkdf2(signupRequest.Password, salt);
+            var passwordHash = PasswordHelper.HashPassword(request.Password);
 
             var user = new User
             {
                 UserName = request.UserName,
                 Email = request.Email,
-                //PasswordHash = passwordHash,
-                //PasswordSalt = Convert.ToBase64String(salt),
+                PasswordHash = passwordHash,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 IsActive = true,
@@ -68,7 +67,6 @@ namespace Application.Services.Concrete
                 Error = "Error creating new user",
                 ErrorCode = "S05"
             };
-
         }
     }
 }

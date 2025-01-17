@@ -6,6 +6,6 @@ namespace Domain.UnitOfWork
     {
         Task<int> CompleteAsync();
 
-        IUserRepository UserRepository { get; set; }
+        IUserRepository UserRepository { get; }
     }
 }
