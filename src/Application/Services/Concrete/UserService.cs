@@ -1,12 +1,13 @@
 ﻿using Application.Dtos.Request;
 using Application.Dtos.Response;
+using Application.Services.Interfaces;
 using Domain.Entities.Tables;
 using Domain.Helper;
 using Domain.UnitOfWork;
 
 namespace Application.Services.Concrete
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
 
