@@ -17,8 +17,8 @@ namespace Infrastructure
 
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddSingleton<IUnitOfWork, UnitOfWork.UnitOfWork>();
-            services.AddSingleton<IUserService, UserService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

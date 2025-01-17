@@ -28,11 +28,11 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 //app.UseHttpsRedirection();
 app.UseDefaultFiles();
-app.UseStaticFiles(new StaticFileOptions()
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Attachments")),
-    RequestPath = "/Attachments"
-});
+//app.UseStaticFiles(new StaticFileOptions()
+//{
+//    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Attachments")),
+//    RequestPath = "/Attachments"
+//});
 app.UseRouting();
 
 app.UseHttpsRedirection();
