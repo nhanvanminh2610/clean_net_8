@@ -1,15 +1,12 @@
+using Infrastructure;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using Application.Extensions;
-using Domain.UnitOfWork;
-using Infrastructure.UnitOfWork;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddServices(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
