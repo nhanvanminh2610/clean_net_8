@@ -1,7 +1,6 @@
 using Infrastructure;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 

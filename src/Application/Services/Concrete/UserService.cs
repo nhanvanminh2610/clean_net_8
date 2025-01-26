@@ -1,7 +1,7 @@
 ﻿using Application.Dtos.Request;
 using Application.Dtos.Response;
 using Application.Services.Interfaces;
-using Domain.Entities.Tables;
+using Domain.Entities.Identity;
 using Domain.Helper;
 using Domain.UnitOfWork;
 

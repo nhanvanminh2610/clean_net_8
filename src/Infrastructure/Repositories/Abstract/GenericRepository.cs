@@ -9,16 +9,16 @@ namespace Infrastructure.Repositories.Abstract
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected ApplicationDbContext _dbContext;
-        protected DbSet<T> dbSet;
+        protected DbSet<T> _dbSet;
         protected readonly ILogger _logger;
 
         public GenericRepository(ApplicationDbContext dbContext = null)
         {
             _dbContext = dbContext;
-            dbSet = _dbContext.Set<T>();
+            _dbSet = _dbContext.Set<T>();
         }
 
-        public virtual IQueryable<T> AsQueryable() => dbSet.AsNoTracking();
+        public virtual IQueryable<T> AsQueryable() => _dbSet.AsNoTracking();
 
         public Task<T> GetAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
             => AsQueryable().FirstOrDefaultAsync(predicate, cancellationToken);
@@ -35,7 +35,7 @@ namespace Infrastructure.Repositories.Abstract
         public async Task AddAsync(T entity, string id, CancellationToken cancellationToken = default)
         {
             UpdateFieldMethorAddEntityModel(entity, id);
-            await dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
             return;
         }
         
@@ -45,14 +45,14 @@ namespace Infrastructure.Repositories.Abstract
             {
                 UpdateFieldMethorAddEntityModel(entity, id);
             }
-            await dbSet.AddRangeAsync(entities);
+            await _dbSet.AddRangeAsync(entities);
             return;
         }
         
         public Task UpdateAsync(T entity, string id, CancellationToken cancellationToken = default)
         {
             UpdateFieldMethorUpdateEntityModel(entity, id);
-            dbSet.Update(entity);
+            _dbSet.Update(entity);
             return Task.CompletedTask;
         }
         
@@ -62,19 +62,19 @@ namespace Infrastructure.Repositories.Abstract
             {
                 UpdateFieldMethorUpdateEntityModel(entity, id);
             }
-            dbSet.UpdateRange(entities);
+            _dbSet.UpdateRange(entities);
             return Task.CompletedTask;
         }
         
         public Task DeleteAsync(T entity, string id, CancellationToken cancellationToken = default)
         {
-            dbSet.Remove(entity);
+            _dbSet.Remove(entity);
             return Task.CompletedTask;
         }
         
         public Task DeleteAsync(IEnumerable<T> entities, string id, CancellationToken cancellationToken = default)
         {
-            dbSet.RemoveRange(entities);
+            _dbSet.RemoveRange(entities);
             return Task.CompletedTask;
         }
 

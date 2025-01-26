@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Tables;
+﻿using Domain.Entities.Identity;
 using Domain.Repositories.Interfaces;
 using Infrastructure.Context;
 using Infrastructure.Repositories.Abstract;

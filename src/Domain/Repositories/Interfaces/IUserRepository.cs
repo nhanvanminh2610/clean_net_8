@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Tables;
+﻿using Domain.Entities.Identity;
 
 namespace Domain.Repositories.Interfaces
 {

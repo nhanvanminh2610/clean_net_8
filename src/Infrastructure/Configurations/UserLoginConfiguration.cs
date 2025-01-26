@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Tables;
+﻿using Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

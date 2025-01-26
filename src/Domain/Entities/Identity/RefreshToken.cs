@@ -2,7 +2,7 @@ using Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Tables
+namespace Domain.Entities.Identity
 {
     [Table("RefreshToken")]
     public partial class RefreshToken : BaseFullAuditableEntity

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Tables;
+namespace Domain.Entities.Identity;
 
 public class User : IdentityUser<int>
 {
