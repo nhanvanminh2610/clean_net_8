@@ -1,10 +1,10 @@
-﻿using Domain.Repositories.Interfaces;
+﻿using Domain.Repositories;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
-namespace Infrastructure.Repositories.Abstract
+namespace Infrastructure.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
@@ -22,14 +22,14 @@ namespace Infrastructure.Repositories.Abstract
 
         public Task<T> GetAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
             => AsQueryable().FirstOrDefaultAsync(predicate, cancellationToken);
-        
+
         public Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
             => AsQueryable().Where(predicate).Select(selector).FirstOrDefaultAsync(cancellationToken);
 
-        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) 
+        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
             => AsQueryable().Where(predicate).ToListAsync();
 
-        public Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default) 
+        public Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
             => AsQueryable().Where(predicate).Select(selector).ToListAsync();
 
         public async Task AddAsync(T entity, string id, CancellationToken cancellationToken = default)
@@ -38,7 +38,7 @@ namespace Infrastructure.Repositories.Abstract
             await _dbSet.AddAsync(entity);
             return;
         }
-        
+
         public async Task AddAsync(IEnumerable<T> entities, string id, CancellationToken cancellationToken = default)
         {
             foreach (var entity in entities)
@@ -48,14 +48,14 @@ namespace Infrastructure.Repositories.Abstract
             await _dbSet.AddRangeAsync(entities);
             return;
         }
-        
+
         public Task UpdateAsync(T entity, string id, CancellationToken cancellationToken = default)
         {
             UpdateFieldMethorUpdateEntityModel(entity, id);
             _dbSet.Update(entity);
             return Task.CompletedTask;
         }
-        
+
         public Task UpdateAsync(IEnumerable<T> entities, string id, CancellationToken cancellationToken = default)
         {
             foreach (var entity in entities)
@@ -65,13 +65,13 @@ namespace Infrastructure.Repositories.Abstract
             _dbSet.UpdateRange(entities);
             return Task.CompletedTask;
         }
-        
+
         public Task DeleteAsync(T entity, string id, CancellationToken cancellationToken = default)
         {
             _dbSet.Remove(entity);
             return Task.CompletedTask;
         }
-        
+
         public Task DeleteAsync(IEnumerable<T> entities, string id, CancellationToken cancellationToken = default)
         {
             _dbSet.RemoveRange(entities);

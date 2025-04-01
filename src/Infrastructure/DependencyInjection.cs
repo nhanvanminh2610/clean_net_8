@@ -1,6 +1,10 @@
 ﻿using Application.Services.Concrete;
 using Application.Services.Interfaces;
+using Domain.Repositories;
 using Domain.UnitOfWork;
+using Infrastructure.Context;
+using Infrastructure.Repositories;
+using Infrastructure.UnitOfWork;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +21,9 @@ namespace Infrastructure
 
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork<ApplicationDbContext>>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
             services.AddScoped<IUserService, UserService>();
 
             return services;

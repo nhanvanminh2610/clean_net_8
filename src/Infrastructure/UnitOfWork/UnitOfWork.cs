@@ -1,11 +1,10 @@
-﻿using Domain.Repositories.Interfaces;
-using Domain.UnitOfWork;
+﻿using Domain.UnitOfWork;
 using Infrastructure.Context;
-using Infrastructure.Repositories.Concrete;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork<TDbContex> : IUnitOfWork, IDisposable where TDbContex : DbContext
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -34,19 +33,5 @@ namespace Infrastructure.UnitOfWork
         {
             _dbContext.Dispose();
         }
-
-        #region repositories container
-
-        private IUserRepository _userRepository;
-        public IUserRepository UserRepository
-        {
-            get
-            {
-                if (_userRepository == null) _userRepository = new UserRepository(_dbContext);
-                return _userRepository;
-            }
-        }
-
-        #endregion
     }
 }
