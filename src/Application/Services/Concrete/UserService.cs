@@ -42,7 +42,7 @@ namespace Application.Services.Concrete
                 PasswordHash = passwordHash,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                IsActive = 1,
+                IsActive = true,
                 Avatar = request.Avatar ?? "default-avatar-icon.jpg",
                 CreatedDateTime = request.CreatedDateTime,
                 LastActivityTime = request.LastActivityTime,

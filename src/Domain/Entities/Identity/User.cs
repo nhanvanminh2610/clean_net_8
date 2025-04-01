@@ -17,7 +17,7 @@ public class User : IdentityUser<int>
     [NotMapped]
     public string FullName => $"{FirstName} {LastName}";
 
-    public int IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     [Required]
     [MaxLength(50)]
