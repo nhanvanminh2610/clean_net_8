@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.UnitOfWork
 {
-    public class UnitOfWork<TDbContex> : IUnitOfWork, IDisposable where TDbContex : DbContext
+    public class UnitOfWork<TDbContext> : IUnitOfWork, IDisposable where TDbContext : DbContext
     {
         private readonly ApplicationDbContext _dbContext;
 
