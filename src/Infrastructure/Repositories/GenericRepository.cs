@@ -19,17 +19,24 @@ namespace Infrastructure.Repositories
         }
 
         public virtual IQueryable<T> AsQueryable() => _dbSet.AsNoTracking();
+        public virtual IQueryable<T> AsQueryable<T>() where T : class => _dbContext.Set<T>().AsNoTracking();
 
         public Task<T> GetAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
             => AsQueryable().FirstOrDefaultAsync(predicate, cancellationToken);
 
-        public Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
+        public Task<T> GetAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> includeExpression, CancellationToken cancellationToken = default)
+            => AsQueryable().Where(predicate).Include(includeExpression).FirstOrDefaultAsync(cancellationToken);
+
+        public Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default) where TResult : class
             => AsQueryable().Where(predicate).Select(selector).FirstOrDefaultAsync(cancellationToken);
+
+        public Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Expression<Func<T, object>> includeExpression, CancellationToken cancellationToken = default) where TResult : class
+           => AsQueryable().Where(predicate).Include(includeExpression).Select(selector).FirstOrDefaultAsync(cancellationToken);
 
         public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
             => AsQueryable().Where(predicate).ToListAsync();
 
-        public Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default)
+        public Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default) where TResult : class
             => AsQueryable().Where(predicate).Select(selector).ToListAsync();
 
         public async Task AddAsync(T entity, string id, CancellationToken cancellationToken = default)
@@ -66,13 +73,13 @@ namespace Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(T entity, string id, CancellationToken cancellationToken = default)
+        public Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
         {
             _dbSet.Remove(entity);
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(IEnumerable<T> entities, string id, CancellationToken cancellationToken = default)
+        public Task DeleteAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
         {
             _dbSet.RemoveRange(entities);
             return Task.CompletedTask;
