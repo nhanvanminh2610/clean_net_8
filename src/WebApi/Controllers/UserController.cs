@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -16,9 +16,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
-        {
-            return await _userService.RegisterAsync(request);
-        }
+        public async Task<RegisterResponse> RegisterAsync(RegisterRequest request) => await _userService.RegisterAsync(request);
+
+        [HttpPost("log-in")]
+        public async Task<TokenResponse> LoginAsync(LoginRequest loginRequest) => await _userService.LoginAsync(loginRequest);
     }
 }

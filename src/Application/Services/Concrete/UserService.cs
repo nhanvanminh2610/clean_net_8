@@ -14,10 +14,11 @@ namespace Application.Services.Concrete
         private readonly IGenericRepository<User> _userRepository;
         private readonly ITokenService _tokenService;
 
-        public UserService(IUnitOfWork unitOfWork, IGenericRepository<User> userRepository)
+        public UserService(IUnitOfWork unitOfWork, IGenericRepository<User> userRepository, ITokenService tokenService)
         {
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
+            _tokenService = tokenService;
         }
 
         public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
@@ -42,6 +43,7 @@ namespace Application.Services.Concrete
                 UserName = request.UserName,
                 Email = request.Email,
                 PasswordHash = passwordHash,
+                PasswordSalt = Convert.ToBase64String(salt),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 IsActive = true,
@@ -101,6 +103,7 @@ namespace Application.Services.Concrete
             }
 
             var token = await Task.Run(() => _tokenService.GenerateTokensAsync(user.Id));
+
 
             user.LastActivityTime = DateTime.Now;
             if (string.IsNullOrEmpty(user.PasswordHash))
