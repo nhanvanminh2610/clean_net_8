@@ -18,26 +18,67 @@ namespace Infrastructure.Repositories
             _dbSet = _dbContext.Set<T>();
         }
 
-        public virtual IQueryable<T> AsQueryable() => _dbSet.AsNoTracking();
-        public virtual IQueryable<T> AsQueryable<T>() where T : class => _dbContext.Set<T>().AsNoTracking();
+        public virtual IQueryable<T> AsQueryable() => _dbSet;
 
-        public Task<T> GetAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
-            => AsQueryable().FirstOrDefaultAsync(predicate, cancellationToken);
+        public Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool isAsNoTracking = false, CancellationToken cancellationToken = default)
+        {
+            if (isAsNoTracking)
+            {
+                _dbSet.AsNoTracking();
+            }
 
-        public Task<T> GetAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> includeExpression, CancellationToken cancellationToken = default)
-            => AsQueryable().Where(predicate).Include(includeExpression).FirstOrDefaultAsync(cancellationToken);
+            return _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
+        }
 
-        public Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default) where TResult : class
-            => AsQueryable().Where(predicate).Select(selector).FirstOrDefaultAsync(cancellationToken);
+        public Task<T> GetAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> includeExpression, bool isAsNoTracking = false, CancellationToken cancellationToken = default)
+        {
+            if (isAsNoTracking)
+            {
+                _dbSet.AsNoTracking();
+            }
 
-        public Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Expression<Func<T, object>> includeExpression, CancellationToken cancellationToken = default) where TResult : class
-           => AsQueryable().Where(predicate).Include(includeExpression).Select(selector).FirstOrDefaultAsync(cancellationToken);
+            return _dbSet.Where(predicate).Include(includeExpression).FirstOrDefaultAsync(cancellationToken);
+        }
 
-        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
-            => AsQueryable().Where(predicate).ToListAsync();
+        public Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, bool isAsNoTracking = false, CancellationToken cancellationToken = default) where TResult : class
+        {
+            if (isAsNoTracking)
+            {
+                _dbSet.AsNoTracking();
+            }
 
-        public Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, CancellationToken cancellationToken = default) where TResult : class
-            => AsQueryable().Where(predicate).Select(selector).ToListAsync();
+            return _dbSet.Where(predicate).Select(selector).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public Task<TResult> GetAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Expression<Func<T, object>> includeExpression, bool isAsNoTracking = false, CancellationToken cancellationToken = default) where TResult : class
+        {
+            if (isAsNoTracking)
+            {
+                _dbSet.AsNoTracking();
+            }
+
+            return _dbSet.Where(predicate).Include(includeExpression).Select(selector).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, bool isAsNoTracking = false, CancellationToken cancellationToken = default)
+        {
+            if (isAsNoTracking)
+            {
+                _dbSet.AsNoTracking();
+            }
+
+            return _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, bool isAsNoTracking = false, CancellationToken cancellationToken = default) where TResult : class
+        {
+            if (isAsNoTracking)
+            {
+                _dbSet.AsNoTracking();
+            }
+
+            return _dbSet.Where(predicate).Select(selector).ToListAsync();
+        }
 
         public async Task AddAsync(T entity, string id, CancellationToken cancellationToken = default)
         {

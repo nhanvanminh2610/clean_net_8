@@ -38,12 +38,12 @@ namespace Application.Services.Concrete
 
             var refreshTokenHashed = PasswordHelper.HashUsingPbkdf2(refreshToken, salt);
 
+            var refreshTokens = new List<RefreshToken>() { };
             if (userRecord.RefreshTokens != null && userRecord.RefreshTokens.Any())
             {
                 await RemoveRefreshTokenAsync(userRecord);
-
             }
-            userRecord.RefreshTokens?.Add(new RefreshToken
+            refreshTokens.Add(new RefreshToken
             {
                 ExpiryDate = DateTime.Now.AddDays(14),
                 UserFId = userId,
@@ -53,8 +53,9 @@ namespace Application.Services.Concrete
                 CreatedBy = userId.ToString(),
                 CreatedAt = DateTime.Now,
             });
-            //_gDContext.AddRange(userRecord.RefreshTokens);
-            await _refreshTokenRepository.AddAsync(userRecord.RefreshTokens, default);
+
+            await _refreshTokenRepository.AddAsync(refreshTokens, default);
+
             await _unitOfWork.CompleteAsync();
 
             var token = new Tuple<string, string>(accessToken, refreshToken);
